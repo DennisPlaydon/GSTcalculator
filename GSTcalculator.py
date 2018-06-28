@@ -1,6 +1,6 @@
 import openpyxl, re
 
-multiRegex = []
+multiRegex = [r'Z\s\w+', r'Mobil\s\w+', r'Bunnings', r'Caltex\s\w+']
 #r'Z\s\w+' matches Z fuel stations
 #r'Mobil\s\w+ matches MOBIL fuel stations
 #r'Bunnings' matches BUNNINGS
@@ -14,15 +14,15 @@ for i in range(2, sheet.max_row):
             #sheet['K'+str(i)] = -1
             sheet['K'+str(i)] = 'WORKS'
         else:
-            
-            #haRegex = re.compile(multiRegex[0])
-            haRegex = re.compile(r'Caltex\s\w+')
-            mo1 = haRegex.search(sheet['F'+str(i)].value)
-            print(mo1.group())
-            sheet['K'+str(i)] = 'WORKS'
-            #if 'Z Ormiston R' in sheet['F'+str(i)].value:
-                #sheet['K'+str(i)] = 1
-            sheet['K'+str(i)] = 'WORKS'
+            for k in range(len(multiRegex)):
+                haRegex = re.compile(multiRegex[k])
+                #mo1 = haRegex.search(sheet['F'+str(i)].value)
+                mo1 = haRegex.search(sheet['F'+str(i)].value)
+                try:
+                    print(mo1.group())
+                    #sheet['K'+str(i)] = 'WORKS'
+                except:
+                     continue
            
     except Exception as exc:
         continue
