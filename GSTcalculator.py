@@ -1,9 +1,13 @@
 import openpyxl, re
+from openpyxl import Workbook
+from openpyxl.styles import Color, PatternFill, Font, Border
+from openpyxl.styles import colors
+from openpyxl.cell import Cell
 
 multiRegex = [
     r'Z\s\w+', r'Mobil\s\w+', r'Bunnings', r'Caltex\s\w+', r'Countdown', r'Bp\sConnect', r'Edl\s\w+', \
      r'Pak\s\w+', r'New\sWorld', r'Inex\s', r'\w+\sEnergy', r'Pallet\sPackaging', r'Vulcan', r'Woodmart',\
-      r'Workstore', r'Spraywell\s\w+', r'Tga\s\w+']
+      r'Workstore', r'Spraywell\s\w+', r'Tga\s\w+', r'Kmart', r'Spark\sNz']
 #r'Z\s\w+' matches Z fuel stations
 #r'Mobil\s\w+ matches MOBIL fuel stations
 #r'Bunnings' matches BUNNINGS
@@ -11,7 +15,8 @@ multiRegex = [
 #r'Countdown' matches COUNTDOWN
 #r'Edl\s\w+' matches EDL fasteners
 
-zeroList = ['Runchun Wang', 'Cplaydon', 'Candice Playdon']
+zeroList = ['Runchun Wang', 'Cplaydon', 'Candice Playdon', 'Dennis Playdon']
+redFill = PatternFill(start_color='FFFF0000', end_color='FFFF0000', fill_type='solid')
 
 total_row = 0
 wb = openpyxl.load_workbook('C:\\Users\\Dennis\\Desktop\\taxprac.xlsx')
@@ -48,13 +53,16 @@ for i in range(2, sheet.max_row):
                 except:
                      continue
                 '''
+        if sheet['K'+str(i)].value == None:
+            sheet['K'+str(i)].fill = redFill
         total_row += 1
+        
     except Exception as exc:
         continue
 
-sheet['M' + str(total_row+3)].value = 'SUM(M2:M' + str(total_row+1)
-sheet['L' + str(total_row+3)].value = 'SUM(L2:L' + str(total_row+1)
-#print(sheet['K117'].value)
+sheet['M' + str(total_row+3)] = '=SUM(M2:M{0})'.format(str(total_row+1))
+sheet['L' + str(total_row+3)] = '=SUM(L2:L{0})'.format(str(total_row+1))
+print(sheet['M191'].value)
 wb.save('C:\\Users\\Dennis\\Desktop\\gst_copy.xlsx')
 '''
 TODO 
